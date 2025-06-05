@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - E-Commerce Store{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 800px;">
+    <div>
+        <div style="width: 100%; height: 300px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd;">
+            <span>Product Image</span>
+        </div>
+    </div>
+    
+    <div>
+        <h1>{{ product.name }}</h1>
+        <p>{{ product.description }}</p>
+        
+        <div class="price" style="font-size: 1.5em; margin: 20px 0;">${{ "%.2f"|format(product.price) }}</div>
+        
+        <p><strong>Stock:</strong> {{ product.stock }} available</p>
+        <p><strong>Category:</strong> {{ product.category }}</p>
+        
+        {% if session.user_id and product.stock > 0 %}
+            <form method="POST" action="/cart/add/{{ product.id }}" style="margin-top: 30px;">
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ product.stock }}" style="width: 100px;">
+                </div>
+                <button type="submit" class="btn">Add to Cart</button>
+            </form>
+        {% elif not session.user_id %}
+            <p><a href="/login">Login</a> to add items to cart</p>
+        {% else %}
+            <p style="color: #dc3545;">Out of stock</p>
+        {% endif %}
+    </div>
+</div>
+
+<div style="margin-top: 40px;">
+    <a href="/products" class="btn" style="background: #6c757d;">← Back to Products</a>
+</div>
+{% endblock %}

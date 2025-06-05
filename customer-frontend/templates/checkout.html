@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - E-Commerce Store{% endblock %}
+
+{% block content %}
+<h2>Checkout</h2>
+
+<div style="max-width: 600px;">
+    <div style="background: #f8f9fa; padding: 20px; margin-bottom: 30px; border-radius: 5px;">
+        <h3>Order Summary</h3>
+        <p>Review your cart items and click "Place Order" to complete your purchase.</p>
+        <p><strong>Note:</strong> This is a demo checkout - no real payment will be processed.</p>
+    </div>
+    
+    <form method="POST">
+        <div style="background: #fff3cd; padding: 15px; margin-bottom: 20px; border-left: 4px solid #ffc107;">
+            <h4>Shipping Information</h4>
+            <p>For demo purposes, shipping information is not collected.</p>
+        </div>
+        
+        <div style="background: #d1ecf1; padding: 15px; margin-bottom: 20px; border-left: 4px solid #bee5eb;">
+            <h4>Payment Information</h4>
+            <p>No real payment processing - this is a demo order.</p>
+        </div>
+        
+        <button type="submit" class="btn" style="font-size: 1.1em; padding: 15px 30px;">Place Order</button>
+        <a href="/cart" class="btn" style="background: #6c757d; margin-left: 10px;">Back to Cart</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+    <div style="border: 1px solid #ddd; padding: 20px; text-align: center;">
+        <h3>Users</h3>
+        <p>Manage user accounts</p>
+        <a href="/users" class="btn">View Users</a>
+    </div>
+    <div style="border: 1px solid #ddd; padding: 20px; text-align: center;">
+        <h3>Products</h3>
+        <p>Manage product catalog</p>
+        <a href="/products" class="btn">View Products</a>
+    </div>
+    <div style="border: 1px solid #ddd; padding: 20px; text-align: center;">
+        <h3>Orders</h3>
+        <p>View and manage orders</p>
+        <a href="/orders" class="btn">View Orders</a>
+    </div>
+    <div style="border: 1px solid #ddd; padding: 20px; text-align: center;">
+        <h3>Debug</h3>
+        <p>System information</p>
+        <a href="/debug" class="btn">Debug Info</a>
+    </div>
+</div>
+
+<div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-left: 4px solid #dc3545;">
+    <h3>⚠️ Security Warning</h3>
+    <p>This admin panel is intentionally vulnerable and should only be used for security testing purposes.</p>
+    <ul>
+        <li>No authentication required</li>
+        <li>Direct database access</li>
+        <li>No input validation</li>
+        <li>Exposes sensitive information</li>
+    </ul>
+</div>
+{% endblock %}

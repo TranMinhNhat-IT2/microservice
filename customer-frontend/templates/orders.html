@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders - E-Commerce Store{% endblock %}
+
+{% block content %}
+<h2>My Orders</h2>
+
+{% if orders %}
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #f8f9fa;">
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Order ID</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: right;">Total</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Status</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">#{{ order.id }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${{ "%.2f"|format(order.total_amount) }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
+                    <span style="padding: 3px 8px; border-radius: 3px; font-size: 12px; 
+                                 background: {% if order.status == 'pending' %}#fff3cd{% elif order.status == 'completed' %}#d4edda{% else %}#f8d7da{% endif %};">
+                        {{ order.status.title() }}
+                    </span>
+                </td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">{{ order.created_at[:10] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>You haven't placed any orders yet.</p>
+    <a href="/products" class="btn">Start Shopping</a>
+{% endif %}
+{% endblock %}

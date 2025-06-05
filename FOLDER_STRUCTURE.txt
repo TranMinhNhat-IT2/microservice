@@ -1,0 +1,121 @@
+vulnerable-ecommerce-microservices/
+├── docker-compose.yml                 # Main orchestration file
+├── README.md                          # Main project documentation
+├── FOLDER_STRUCTURE.txt              # This file
+│
+├── api-gateway/                       # API Gateway Service
+│   ├── Dockerfile
+│   ├── app.py                        # Main application
+│   └── requirements.txt
+│
+├── user-service/                     # User Management Service
+│   ├── Dockerfile
+│   ├── app.py                        # User registration, auth, profiles
+│   ├── requirements.txt
+│   └── README.md                     # Service-specific documentation
+│
+├── product-service/                  # Product Catalog Service
+│   ├── Dockerfile
+│   ├── app.py                        # Product CRUD operations
+│   ├── requirements.txt
+│   └── README.md
+│
+├── cart-service/                     # Shopping Cart Service
+│   ├── Dockerfile
+│   ├── app.py                        # Cart management with Redis
+│   ├── requirements.txt
+│   └── README.md
+│
+├── order-service/                    # Order Processing Service
+│   ├── Dockerfile
+│   ├── app.py                        # Order creation and management
+│   ├── requirements.txt
+│   └── README.md
+│
+├── upload-service/                   # File Upload Service (SSRF Demo)
+│   ├── Dockerfile
+│   ├── app.py                        # URL-based file uploads
+│   ├── requirements.txt
+│   └── README.md
+│
+├── external-api/                     # Third-party API Simulation
+│   ├── Dockerfile
+│   ├── app.py                        # Discount and validation APIs
+│   ├── requirements.txt
+│   └── README.md
+│
+├── admin-panel/                      # Administrative Web Interface
+│   ├── Dockerfile
+│   ├── app.py                        # Flask admin application
+│   ├── requirements.txt
+│   ├── README.md
+│   └── templates/                    # Jinja2 templates
+│       ├── base.html                 # Base template
+│       ├── dashboard.html            # Admin dashboard
+│       ├── users.html                # User management
+│       ├── edit_user.html            # User editing form
+│       ├── products.html             # Product management
+│       ├── add_product.html          # Product creation form
+│       ├── orders.html               # Order management
+│       └── debug.html                # Debug information
+│
+└── customer-frontend/                # Customer Web Interface
+    ├── Dockerfile
+    ├── app.py                        # Flask customer application
+    ├── requirements.txt
+    └── templates/                    # Jinja2 templates
+        ├── base.html                 # Base template
+        ├── home.html                 # Landing page
+        ├── register.html             # User registration
+        ├── login.html                # User login
+        ├── products.html             # Product catalog
+        ├── product_detail.html       # Product details
+        ├── cart.html                 # Shopping cart
+        ├── checkout.html             # Checkout process
+        ├── orders.html               # Order history
+        └── profile.html              # User profile
+
+DATABASES (Docker Volumes):
+├── user-db/                          # PostgreSQL for User Service
+├── product-db/                       # PostgreSQL for Product Service
+├── order-db/                         # PostgreSQL for Order Service
+└── redis/                            # Redis for Cart Service
+
+MESSAGING:
+└── rabbitmq/                         # RabbitMQ for inter-service communication
+
+PORTS:
+├── 3000  → Admin Panel
+├── 3001  → Customer Frontend
+├── 5001  → User Service
+├── 5002  → Product Service
+├── 5003  → Cart Service
+├── 5004  → Order Service
+├── 5005  → Upload Service
+├── 5006  → External API
+├── 5432  → User Database (PostgreSQL)
+├── 5433  → Product Database (PostgreSQL)
+├── 5434  → Order Database (PostgreSQL)
+├── 6379  → Redis
+├── 5672  → RabbitMQ
+├── 8000  → API Gateway
+└── 15672 → RabbitMQ Management UI
+
+VULNERABILITY MAPPING:
+├── API1 (BOLA)           → user-service, order-service, cart-service
+├── API2 (Broken Auth)    → user-service
+├── API3 (Property Auth)  → user-service
+├── API4 (Resource Abuse) → cart-service, product-service
+├── API5 (Function Auth)  → All services (admin endpoints)
+├── API6 (Business Logic) → order-service, cart-service
+├── API7 (SSRF)          → upload-service
+├── API8 (Misconfig)     → All services
+├── API9 (Inventory)     → product-service
+└── API10 (Unsafe API)   → external-api integration
+
+DEVELOPMENT WORKFLOW:
+1. Edit code in service directories
+2. Rebuild specific service: docker-compose build <service-name>
+3. Restart service: docker-compose restart <service-name>
+4. View logs: docker-compose logs <service-name>
+5. Access databases: docker-compose exec <db-service> psql -U user -d <database>

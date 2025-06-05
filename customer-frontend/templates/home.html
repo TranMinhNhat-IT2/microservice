@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - E-Commerce Store{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 50px 0;">
+    <h1>Welcome to Our E-Commerce Store</h1>
+    <p>Discover amazing products at great prices!</p>
+    
+    {% if not session.user_id %}
+        <div style="margin: 30px 0;">
+            <a href="/register" class="btn" style="margin-right: 10px;">Get Started</a>
+            <a href="/login" class="btn" style="background: #6c757d;">Login</a>
+        </div>
+    {% endif %}
+    
+    <div style="margin-top: 40px;">
+        <a href="/products" class="btn">Browse Products</a>
+    </div>
+</div>
+
+<div style="background: #f8f9fa; padding: 30px; margin-top: 40px; border-left: 4px solid #dc3545;">
+    <h3>⚠️ Security Notice</h3>
+    <p>This is a deliberately vulnerable e-commerce application designed for security testing and education.</p>
+    <p><strong>Do not use real personal information or payment details.</strong></p>
+</div>
+{% endblock %}

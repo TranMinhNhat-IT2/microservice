@@ -1,0 +1,150 @@
+version: '3.8'
+
+services:
+  # Databases
+  user-db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - user_data:/var/lib/postgresql/data
+
+  product-db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: productdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - product_data:/var/lib/postgresql/data
+
+  order-db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: orderdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5434:5432"
+    volumes:
+      - order_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: password
+
+  # API Gateway
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - user-service
+      - product-service
+      - cart-service
+      - order-service
+    environment:
+      - USER_SERVICE_URL=http://user-service:5001
+      - PRODUCT_SERVICE_URL=http://product-service:5002
+      - CART_SERVICE_URL=http://cart-service:5003
+      - ORDER_SERVICE_URL=http://order-service:5004
+
+  # Microservices
+  user-service:
+    build: ./user-service
+    ports:
+      - "5001:5001"
+    depends_on:
+      - user-db
+      - rabbitmq
+    environment:
+      - DATABASE_URL=postgresql://user:password@user-db:5432/userdb
+      - RABBITMQ_URL=amqp://admin:password@rabbitmq:5672/
+
+  product-service:
+    build: ./product-service
+    ports:
+      - "5002:5002"
+    depends_on:
+      - product-db
+      - rabbitmq
+    environment:
+      - DATABASE_URL=postgresql://user:password@product-db:5432/productdb
+      - RABBITMQ_URL=amqp://admin:password@rabbitmq:5672/
+
+  cart-service:
+    build: ./cart-service
+    ports:
+      - "5003:5003"
+    depends_on:
+      - redis
+      - rabbitmq
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://admin:password@rabbitmq:5672/
+
+  order-service:
+    build: ./order-service
+    ports:
+      - "5004:5004"
+    depends_on:
+      - order-db
+      - rabbitmq
+    environment:
+      - DATABASE_URL=postgresql://user:password@order-db:5432/orderdb
+      - RABBITMQ_URL=amqp://admin:password@rabbitmq:5672/
+
+  upload-service:
+    build: ./upload-service
+    ports:
+      - "5005:5005"
+    environment:
+      - UPLOAD_DIR=/app/uploads
+
+  external-api:
+    build: ./external-api
+    ports:
+      - "5006:5006"
+
+  # Frontend Services
+  admin-panel:
+    build: ./admin-panel
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api-gateway
+    environment:
+      - API_GATEWAY_URL=http://api-gateway:8000
+      - USER_DB_URL=postgresql://user:password@user-db:5432/userdb
+      - PRODUCT_DB_URL=postgresql://user:password@product-db:5432/productdb
+      - ORDER_DB_URL=postgresql://user:password@order-db:5432/orderdb
+
+  customer-frontend:
+    build: ./customer-frontend
+    ports:
+      - "3001:3001"
+    depends_on:
+      - api-gateway
+    environment:
+      - API_GATEWAY_URL=http://api-gateway:8000
+
+volumes:
+  user_data:
+  product_data:
+  order_data:

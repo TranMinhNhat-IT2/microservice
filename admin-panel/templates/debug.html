@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Debug Info - Admin Panel{% endblock %}
+
+{% block content %}
+<h1>Debug Information</h1>
+
+<div style="background: #f8f9fa; padding: 20px; margin-bottom: 20px;">
+    <h3>Service URLs</h3>
+    <ul>
+        <li><strong>API Gateway:</strong> {{ api_gateway }}</li>
+        <li><strong>User Database:</strong> {{ user_db }}</li>
+        <li><strong>Product Database:</strong> {{ product_db }}</li>
+        <li><strong>Order Database:</strong> {{ order_db }}</li>
+    </ul>
+</div>
+
+<div style="background: #fff3cd; padding: 20px; border-left: 4px solid #ffc107;">
+    <h3>⚠️ Vulnerability Information</h3>
+    <p>This debug page exposes sensitive system information including:</p>
+    <ul>
+        <li>Database connection strings</li>
+        <li>Internal service URLs</li>
+        <li>System configuration</li>
+    </ul>
+    <p>In a production system, this information should never be exposed.</p>
+</div>
+{% endblock %}

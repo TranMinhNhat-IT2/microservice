@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Products - Admin Panel{% endblock %}
+
+{% block content %}
+<h1>Products Management</h1>
+
+<a href="/products/add" class="btn" style="margin-bottom: 20px;">Add New Product</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Category</th>
+            <th>Deleted</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr style="{{ 'opacity: 0.5;' if product[6] else '' }}">
+            <td>{{ product[0] }}</td>
+            <td>{{ product[1] }}</td>
+            <td>{{ product[2][:50] }}...</td>
+            <td>${{ "%.2f"|format(product[3]) }}</td>
+            <td>{{ product[4] }}</td>
+            <td>{{ product[5] }}</td>
+            <td>{{ "Yes" if product[6] else "No" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

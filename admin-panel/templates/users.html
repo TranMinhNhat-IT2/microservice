@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Users - Admin Panel{% endblock %}
+
+{% block content %}
+<h1>Users Management</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Admin</th>
+            <th>Created</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user[0] }}</td>
+            <td>{{ user[1] }}</td>
+            <td>{{ user[2] }}</td>
+            <td>{{ "Yes" if user[3] else "No" }}</td>
+            <td>{{ user[4] }}</td>
+            <td>
+                <a href="/users/{{ user[0] }}/edit" class="btn">Edit</a>
+                <form style="display: inline;" method="POST" action="/users/{{ user[0] }}/delete" 
+                      onsubmit="return confirm('Are you sure?')">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

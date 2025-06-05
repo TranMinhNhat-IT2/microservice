@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - E-Commerce Store{% endblock %}
+
+{% block content %}
+<h2>User Profile</h2>
+
+<div style="max-width: 500px;">
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 5px;">
+        <h3>Account Information</h3>
+        
+        <div style="margin-bottom: 15px;">
+            <strong>User ID:</strong> {{ user.id }}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <strong>Username:</strong> {{ user.username }}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <strong>Email:</strong> {{ user.email }}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <strong>Account Type:</strong> 
+            {% if user.is_admin %}
+                <span style="color: #dc3545; font-weight: bold;">Administrator</span>
+            {% else %}
+                Regular User
+            {% endif %}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <strong>Member Since:</strong> {{ user.created_at[:10] }}
+        </div>
+    </div>
+    
+    {% if user.is_admin %}
+    <div style="background: #fff3cd; padding: 15px; margin-top: 20px; border-left: 4px solid #ffc107;">
+        <h4>Admin Access</h4>
+        <p>You have administrator privileges.</p>
+        <a href="http://localhost:3000" target="_blank" class="btn">Access Admin Panel</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
